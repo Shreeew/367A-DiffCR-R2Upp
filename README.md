@@ -1,4 +1,6 @@
 # 367A Project - Detecting Deforestation Drivers
+By Sander Braastad & Kjell Anders Grytting
+
 This repository contains our solutions for the "Identifying Deforestation Drivers - Solafune competition"
 
 ## Requirements
