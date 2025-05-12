@@ -1,0 +1,82 @@
+{
+    "name": "solafune_test",
+    "phase": "test",
+    "seed": 42,
+    "distributed": false,
+    "world_size": 1,
+    "global_rank": 0,
+    "finetune_norm": false,
+  
+    "train": {
+      "tensorboard": false
+    },
+  
+    "path": {
+      "base_dir": "experiments",
+      "checkpoint": "checkpoints",
+      "log": "logs",
+      "visual": "visuals",
+      "result": "results",
+      "code": "codes"
+    },
+  
+    "datasets": {
+      "test": {
+        "which_dataset": {
+          "name": ["data.solafune_cloudremoval", "SolafuneCloudyTestDataset"],
+          "args": {
+            "data_root": "./data/evaluation_images"
+          }
+        },
+        "dataloader": {
+          "args": {
+            "batch_size": 1,
+            "shuffle": false,
+            "num_workers": 2
+          }
+        }
+      }
+    },
+  
+    "save_dir": "checkpoints/",
+    "model": {
+      "which_networks": [
+        {
+          "name": ["models.network", "DiffCR"],
+          "args": {
+            "unet": {
+                "in_channel": 24,
+                "out_channel": 12,
+                "inner_channel": 48,                    
+                "channel_mults": [1, 2, 4],            
+                "res_blocks": [1, 2, 2],               
+                "dropout": 0.05,                       
+                "attn_res": [32],                      
+                "norm_groups": 16,                     
+                "image_size": 128                      
+              },
+
+          "beta_schedule": {
+            "train": {
+              "schedule": "sigmoid",
+              "n_timestep": 1000,
+              "linear_start": 1e-6,
+              "linear_end": 0.01
+            },
+            "test": {
+              "schedule": "sigmoid",
+              "n_timestep": 5,
+              "linear_start": 1e-6,
+              "linear_end": 0.01
+            }
+          }
+
+          }
+        }
+      ],
+
+      "which_losses": [],
+      "which_metrics": []
+    }
+  }
+  

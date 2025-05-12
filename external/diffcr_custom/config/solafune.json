@@ -1,0 +1,96 @@
+{
+    "name": "solafune", 
+    "phase": "train",
+    "seed": 42,
+    "distributed": false,
+    "world_size": 1,
+    "global_rank": 0,
+    "finetune_norm": false,
+  
+    "debug": {
+
+    },
+  
+    "path": {
+      "base_dir": "experiments",
+      "checkpoint": "checkpoints",
+      "log": "logs",
+      "visual": "visuals",
+      "result": "results",
+      "code": "codes"
+    },
+  
+    "train": {
+      "lr_schedule": "constant",
+      "weight_decay": 0.0,
+      "save_freq": 1
+    },
+  
+    "datasets": {
+      "train": {
+        "which_dataset": {
+          "name": ["data.dataset", "SolafuneCloudRemovalDataset"],
+          "args": {
+            "data_root": "./data"
+          }
+        },
+        "dataloader": {
+          "args": {
+            "batch_size": 1,
+            "shuffle": true,
+            "num_workers": 4
+          }
+        }
+      }
+
+    },
+  
+    "save_dir": "checkpoints/",
+    "epochs": 50,
+    "lr": 1e-4,
+  
+    "model": {
+      "which_networks": [
+        {
+          "name": ["models.network", "DiffCR"],
+          "args": {
+            "unet": {
+              "in_channel": 24,
+              "out_channel": 12,
+              "inner_channel": 32,                    
+              "channel_mults": [1, 2, 4],            
+              "res_blocks": 2,               
+              "dropout": 0.05,                       
+              "attn_res": [],                      
+              "norm_groups": 16,                     
+              "image_size": 128                      
+            },
+            "beta_schedule": {
+              "train": {
+                "schedule": "sigmoid",
+                "n_timestep": 1000,
+                "linear_start": 1e-6,
+                "linear_end": 0.01
+              },
+              "test": {
+                "schedule": "sigmoid",
+                "n_timestep": 5,
+                "linear_start": 1e-6,
+                "linear_end": 0.01
+              }
+            }
+          }
+        }
+      ],
+    "which_losses": [
+      {
+        "name": ["models.loss", "l1_loss"],
+        "args": {}
+      }
+    ],
+
+
+      "which_metrics": []
+    }
+  }
+  
